@@ -1,4 +1,5 @@
 import { parse as parseJsonc } from "@std/jsonc";
+import { parseArgs } from "node:util";
 
 interface DenoConfig {
   tasks?: Record<string, string>;
@@ -76,17 +77,45 @@ async function runTasksParallel(
 }
 
 async function main() {
-  const args = Deno.args;
-
-  if (args.length === 0) {
-    console.error("Usage: deno-run-all [--parallel] <pattern>");
-    Deno.exit(1);
-  }
-
-  const parallel = args.includes("--parallel");
-  const pattern = args[args.length - 1];
-
   try {
+    const { values, positionals } = parseArgs({
+      args: Deno.args,
+      options: {
+        parallel: {
+          type: "boolean",
+          short: "p",
+          default: false,
+        },
+        help: {
+          type: "boolean",
+          short: "h",
+          default: false,
+        },
+      },
+      allowPositionals: true,
+    });
+
+    if (values.help) {
+      console.log(`Usage: deno-run-all [options] <pattern>
+
+Options:
+  -p, --parallel    Run tasks in parallel
+  -h, --help        Show this help message
+
+Examples:
+  deno-run-all 'build:*'
+  deno-run-all --parallel 'test:*'
+  deno-run-all -p 'lint:*'`);
+      Deno.exit(0);
+    }
+
+    if (positionals.length === 0) {
+      console.error("Usage: deno-run-all [--parallel] <pattern>");
+      Deno.exit(1);
+    }
+
+    const parallel = values.parallel;
+    const pattern = positionals[0];
     const config = await loadDenoConfig();
 
     if (!config.tasks) {

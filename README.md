@@ -1,6 +1,7 @@
 # deno-run-all
 
-A Deno version of npm-run-all. Run multiple tasks defined in `deno.json` using pattern matching.
+A Deno version of npm-run-all. Run multiple tasks defined in `deno.json` using
+pattern matching.
 
 ## Features
 
@@ -11,14 +12,36 @@ A Deno version of npm-run-all. Run multiple tasks defined in `deno.json` using p
 
 ## Usage
 
-Add deno-run-all to your `deno.json` tasks:
+### Direct usage from JSR
+
+```bash
+# Use latest version (recommended) - permissions defined in deno.json
+deno run jsr:@masinc/deno-run-all 'build:*'
+
+# Use specific version
+deno run jsr:@masinc/deno-run-all@0.1.0 'build:*'
+
+# Run tasks in parallel (long form)
+deno run jsr:@masinc/deno-run-all --parallel 'test:*'
+
+# Run tasks in parallel (short form)
+deno run jsr:@masinc/deno-run-all -p 'test:*'
+
+# Show help
+deno run jsr:@masinc/deno-run-all --help
+
+# Or specify permissions manually if needed
+deno run --allow-read=deno.json,deno.jsonc --allow-run=deno jsr:@masinc/deno-run-all 'build:*'
+```
+
+### Add to your `deno.json` tasks
 
 ```json
 {
   "tasks": {
-    "build": "deno run -A main.ts 'build:*'",
-    "test": "deno run -A main.ts 'test:*'",
-    "test:parallel": "deno run -A main.ts --parallel 'test:*'"
+    "build": "deno run jsr:@masinc/deno-run-all 'build:*'",
+    "test": "deno run jsr:@masinc/deno-run-all 'test:*'",
+    "test:parallel": "deno run jsr:@masinc/deno-run-all -p 'test:*'"
   }
 }
 ```
@@ -43,8 +66,10 @@ Given this `deno.json`:
 ```json
 {
   "tasks": {
+    "build": "deno run jsr:@masinc/deno-run-all 'build:*'",
     "build:lib": "echo 'Building library...'",
     "build:docs": "echo 'Building documentation...'",
+    "test": "deno run jsr:@masinc/deno-run-all 'test:*'",
     "test:unit": "echo 'Running unit tests...'",
     "test:integration": "echo 'Running integration tests...'",
     "lint": "deno lint"
@@ -53,48 +78,113 @@ Given this `deno.json`:
 ```
 
 ### Run all build tasks (serial)
+
 ```bash
 deno task build
 ```
 
 ### Run all test tasks (parallel)
+
 ```bash
 deno task test:parallel
 ```
 
 ## Installation
 
-### Compile to binary
+### Direct usage from JSR (Recommended)
+
+No installation needed, use directly:
 
 ```bash
-# Build as deno-run-all
-deno task build:deno-run-all
+deno run jsr:@masinc/deno-run-all 'build:*'
+```
 
-# Build as dna (short alias)
+### Install as global command
+
+```bash
+# Install latest version globally
+deno install --name deno-run-all jsr:@masinc/deno-run-all
+
+# Install specific version
+deno install --name deno-run-all jsr:@masinc/deno-run-all@0.1.0
+
+# Or with a shorter name
+deno install --name dna jsr:@masinc/deno-run-all
+
+# Then use anywhere
+deno-run-all 'build:*'
+dna -p 'test:*'
+
+# To uninstall
+deno uninstall deno-run-all
+deno uninstall dna
+```
+
+### Compile to binary from JSR
+
+```bash
+# Compile directly from JSR
+deno compile --allow-read --allow-run=deno --output deno-run-all jsr:@masinc/deno-run-all
+
+# Or with a shorter name
+deno compile --allow-read --allow-run=deno --output dna jsr:@masinc/deno-run-all
+
+# Then use the binary
+./deno-run-all 'build:*'
+./dna -p 'test:*'
+```
+
+### Development builds
+
+```bash
+# Clone this repository first, then:
+deno task build:deno-run-all
 deno task build:dna
 ```
 
-### Use directly (for development)
+### Local development usage
 
 ```bash
-deno run -A main.ts "pattern"
+# With minimal permissions
+deno run --allow-read=deno.json,deno.jsonc --allow-run=deno main.ts "test:*"
+
+# Or with all permissions (quick testing)
+deno run -A main.ts "test:*"
 ```
 
 ## Development
 
 ### Run tests
+
 ```bash
 deno task test
 ```
 
 ### Lint
+
 ```bash
 deno task lint
 ```
 
 ### Format
+
 ```bash
 deno task format
+```
+
+## Command Line Options
+
+```
+Usage: deno-run-all [options] <pattern>
+
+Options:
+  -p, --parallel    Run tasks in parallel
+  -h, --help        Show help message
+
+Examples:
+  deno-run-all 'build:*'
+  deno-run-all --parallel 'test:*'
+  deno-run-all -p 'lint:*'
 ```
 
 ## Pattern Matching
@@ -107,6 +197,7 @@ deno task format
 ## Configuration Files
 
 Supports both:
+
 - `deno.json` (parsed with `JSON.parse`)
 - `deno.jsonc` (parsed with `@std/jsonc` to handle comments)
 
