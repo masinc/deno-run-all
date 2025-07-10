@@ -1,7 +1,9 @@
 import { parse as parseJsonc } from "@std/jsonc";
 import { parseArgs } from "node:util";
+import denoJson from "./deno.json" with { type: "json" };
 
 interface DenoConfig {
+  version?: string;
   tasks?: Record<string, string>;
 }
 
@@ -91,9 +93,19 @@ async function main() {
           short: "h",
           default: false,
         },
+        version: {
+          type: "boolean",
+          short: "v",
+          default: false,
+        },
       },
       allowPositionals: true,
     });
+
+    if (values.version) {
+      console.log(`deno-run-all v${denoJson.version}`);
+      Deno.exit(0);
+    }
 
     if (values.help) {
       console.log(`Usage: deno-run-all [options] <pattern>
@@ -101,6 +113,7 @@ async function main() {
 Options:
   -p, --parallel    Run tasks in parallel
   -h, --help        Show this help message
+  -v, --version     Show version information
 
 Examples:
   deno-run-all 'build:*'
