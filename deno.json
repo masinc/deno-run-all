@@ -1,0 +1,18 @@
+{
+  "tasks": {
+    "dev": "deno run --watch main.ts",
+    "build": "deno run -A main.ts 'build:*'",
+    "build:deno-run-all": "deno compile --allow-read --allow-run --output dist/deno-run-all main.ts",
+    "build:dna": "deno compile --allow-read --allow-run --output dist/dna main.ts",
+    "test": "deno run -A main.ts 'test:*'",
+    "test:unit": "deno test main.ts",
+    "test:integration:simple": "cd examples/simple-project && deno task test",
+    "test:integration:jsonc": "cd examples/jsonc-project && deno task test",
+    "lint": "deno lint",
+    "format": "deno fmt"
+  },
+  "imports": {
+    "@std/assert": "jsr:@std/assert@1",
+    "@std/jsonc": "jsr:@std/jsonc@^1.0.2"
+  }
+}
