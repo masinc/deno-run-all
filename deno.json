@@ -3,10 +3,6 @@
   "version": "0.2.2",
   "license": "MIT",
   "exports": "./main.ts",
-  "permissions": {
-    "read": true,
-    "run": ["deno"]
-  },
   "tasks": {
     "dev": "deno run --allow-read=deno.json,deno.jsonc --allow-run=deno --watch main.ts",
     "build": "deno run -A main.ts 'build:*'",

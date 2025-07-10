@@ -15,23 +15,23 @@ pattern matching.
 ### Direct usage from JSR
 
 ```bash
-# Use latest version (recommended) - permissions defined in deno.json
-deno run jsr:@masinc/deno-run-all 'build:*'
+# Use latest version (recommended)
+deno run --allow-read --allow-run=deno jsr:@masinc/deno-run-all 'build:*'
 
 # Use specific version
-deno run jsr:@masinc/deno-run-all@0.1.0 'build:*'
+deno run --allow-read --allow-run=deno jsr:@masinc/deno-run-all@0.2.2 'build:*'
 
 # Run tasks in parallel (long form)
-deno run jsr:@masinc/deno-run-all --parallel 'test:*'
+deno run --allow-read --allow-run=deno jsr:@masinc/deno-run-all --parallel 'test:*'
 
 # Run tasks in parallel (short form)
-deno run jsr:@masinc/deno-run-all -p 'test:*'
+deno run --allow-read --allow-run=deno jsr:@masinc/deno-run-all -p 'test:*'
 
 # Show help
-deno run jsr:@masinc/deno-run-all --help
+deno run --allow-read --allow-run=deno jsr:@masinc/deno-run-all --help
 
-# Or specify permissions manually if needed
-deno run --allow-read=deno.json,deno.jsonc --allow-run=deno jsr:@masinc/deno-run-all 'build:*'
+# Show version
+deno run --allow-read --allow-run=deno jsr:@masinc/deno-run-all --version
 ```
 
 ### Add to your `deno.json` tasks
@@ -39,9 +39,9 @@ deno run --allow-read=deno.json,deno.jsonc --allow-run=deno jsr:@masinc/deno-run
 ```json
 {
   "tasks": {
-    "build": "deno run jsr:@masinc/deno-run-all 'build:*'",
-    "test": "deno run jsr:@masinc/deno-run-all 'test:*'",
-    "test:parallel": "deno run jsr:@masinc/deno-run-all -p 'test:*'"
+    "build": "deno run --allow-read --allow-run=deno jsr:@masinc/deno-run-all 'build:*'",
+    "test": "deno run --allow-read --allow-run=deno jsr:@masinc/deno-run-all 'test:*'",
+    "test:parallel": "deno run --allow-read --allow-run=deno jsr:@masinc/deno-run-all -p 'test:*'"
   }
 }
 ```
@@ -66,10 +66,10 @@ Given this `deno.json`:
 ```json
 {
   "tasks": {
-    "build": "deno run jsr:@masinc/deno-run-all 'build:*'",
+    "build": "deno run --allow-read --allow-run=deno jsr:@masinc/deno-run-all 'build:*'",
     "build:lib": "echo 'Building library...'",
     "build:docs": "echo 'Building documentation...'",
-    "test": "deno run jsr:@masinc/deno-run-all 'test:*'",
+    "test": "deno run --allow-read --allow-run=deno jsr:@masinc/deno-run-all 'test:*'",
     "test:unit": "echo 'Running unit tests...'",
     "test:integration": "echo 'Running integration tests...'",
     "lint": "deno lint"
@@ -96,20 +96,20 @@ deno task test:parallel
 No installation needed, use directly:
 
 ```bash
-deno run jsr:@masinc/deno-run-all 'build:*'
+deno run --allow-read --allow-run=deno jsr:@masinc/deno-run-all 'build:*'
 ```
 
 ### Install as global command
 
 ```bash
 # Install latest version globally
-deno install --name deno-run-all jsr:@masinc/deno-run-all
+deno install --allow-read --allow-run=deno --name deno-run-all jsr:@masinc/deno-run-all
 
 # Install specific version
-deno install --name deno-run-all jsr:@masinc/deno-run-all@0.1.0
+deno install --allow-read --allow-run=deno --name deno-run-all jsr:@masinc/deno-run-all@0.2.2
 
 # Or with a shorter name
-deno install --name dna jsr:@masinc/deno-run-all
+deno install --allow-read --allow-run=deno --name dna jsr:@masinc/deno-run-all
 
 # Then use anywhere
 deno-run-all 'build:*'
@@ -180,6 +180,7 @@ Usage: deno-run-all [options] <pattern>
 Options:
   -p, --parallel    Run tasks in parallel
   -h, --help        Show help message
+  -v, --version     Show version information
 
 Examples:
   deno-run-all 'build:*'
