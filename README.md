@@ -15,16 +15,19 @@ pattern matching.
 ### Direct usage from JSR
 
 ```bash
-# Use latest version (recommended)
+# Recommended: Minimal permissions
 deno run --allow-read --allow-run=deno jsr:@masinc/deno-run-all 'build:*'
+
+# Alternative: Read-only permission (shorter)
+deno run -R --allow-run=deno jsr:@masinc/deno-run-all 'build:*'
+
+# Quick testing: All permissions (not recommended for production)
+deno run -A jsr:@masinc/deno-run-all 'build:*'
 
 # Use specific version
 deno run --allow-read --allow-run=deno jsr:@masinc/deno-run-all@0.2.2 'build:*'
 
-# Run tasks in parallel (long form)
-deno run --allow-read --allow-run=deno jsr:@masinc/deno-run-all --parallel 'test:*'
-
-# Run tasks in parallel (short form)
+# Run tasks in parallel
 deno run --allow-read --allow-run=deno jsr:@masinc/deno-run-all -p 'test:*'
 
 # Show help
@@ -96,7 +99,11 @@ deno task test:parallel
 No installation needed, use directly:
 
 ```bash
+# Minimal permissions (recommended)
 deno run --allow-read --allow-run=deno jsr:@masinc/deno-run-all 'build:*'
+
+# Quick testing (not recommended for production)
+deno run -A jsr:@masinc/deno-run-all 'build:*'
 ```
 
 ### Install as global command
@@ -145,10 +152,13 @@ deno task build:dna
 ### Local development usage
 
 ```bash
-# With minimal permissions
+# Recommended: Minimal permissions
 deno run --allow-read=deno.json,deno.jsonc --allow-run=deno main.ts "test:*"
 
-# Or with all permissions (quick testing)
+# Alternative: Read-only permission (shorter)
+deno run -R --allow-run=deno main.ts "test:*"
+
+# Quick testing: All permissions (not recommended for production)
 deno run -A main.ts "test:*"
 ```
 
