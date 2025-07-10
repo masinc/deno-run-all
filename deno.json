@@ -4,7 +4,7 @@
   "license": "MIT",
   "exports": "./main.ts",
   "permissions": {
-    "read": [".", "./deno.json", "./deno.jsonc"],
+    "read": true,
     "run": ["deno"]
   },
   "tasks": {
